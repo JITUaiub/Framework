@@ -1,0 +1,13 @@
+{
+  "application-name": "TEST-PROJECT",
+  "version": "1.0.0",
+  "config-file-type": "json",
+  "log-level" : [
+    "info",
+    "development",
+    "config",
+    "warning"
+  ],
+  "server" : "tomcat",
+  "server-port" : "8888"
+}

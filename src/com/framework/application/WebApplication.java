@@ -1,0 +1,55 @@
+package com.framework.application;
+
+import com.framework.controller.ControllerInitializer;
+import com.framework.log.AppLogger;
+import com.framework.parser.JSONParser;
+import com.framework.parser.Parser;
+import com.framework.server.Server;
+import com.framework.server.ServerFactory;
+import com.framework.server.TomcatServer;
+
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class WebApplication implements Application{
+    private final String APPLICATION_CONFIG_PATH;
+
+    public WebApplication(String app_config) {
+        this.APPLICATION_CONFIG_PATH = app_config;
+    }
+
+    @Override
+    public void initialize() {
+        // Load Application Startup Properties
+        Parser parser = new JSONParser();
+        parser.parse(APPLICATION_CONFIG_PATH);
+
+        // Setting up Logger
+        AppLogger logger = AppLogger.getInstance(WebApplication.class);
+        logger.setLogLevels((List<String>) parser.getPropertyValue("log-level"));
+        logger.infoMessage("Starting Web Application.");
+        logger.configMessage("application-config.json Loaded into Application.");
+
+        // APPLICATION INFO LOG
+        logger.infoMessage("APPLICATION NAME -> " + parser.getPropertyValue("application-name"));
+        logger.infoMessage("APPLICATION VERSION -> " + parser.getPropertyValue("version"));
+        logger.infoMessage("Preferred Config Type -> " + parser.getPropertyValue("config-file-type"));
+
+        // Load Controllers
+        ControllerInitializer.loadControllers();
+
+
+        // Start Server
+        Server server = ServerFactory.getServer(parser.getPropertyValue("server").toString());
+        server.setPort(Integer.parseInt(parser.getPropertyValue("server-port").toString()));
+        logger.infoMessage(server.getServerName() + " Server Starting On Port -> http://" + server.getHost() + ":" +server.getPort());
+        server.start();
+    }
+
+    @Override
+    public void run() {
+        initialize();
+    }
+
+}
