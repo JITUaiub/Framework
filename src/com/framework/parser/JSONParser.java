@@ -1,5 +1,6 @@
 package com.framework.parser;
 
+import com.framework.application.WebApplication;
 import com.framework.log.AppLogger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -9,7 +10,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class JSONParser implements Parser {
-    private AppLogger logger = AppLogger.getInstance(this.getClass());
     private JSONObject configContent;
     JSONObject object;
 
@@ -21,11 +21,11 @@ public class JSONParser implements Parser {
     @Override
     public void parse(String configFilePath) {
         org.json.simple.parser.JSONParser jsonParser = new org.json.simple.parser.JSONParser();
-        logger.developmentMessage("Starting JSON Parsing.");
+        AppLogger.developmentMessage(JSONParser.class, "Starting JSON Parsing.");
         try {
             this.configContent = (JSONObject) jsonParser.parse(new FileReader(configFilePath));
-            logger.developmentMessage("Finished JSON Parsing.");
-            logger.developmentMessage(configFilePath + " CONTENT -> " + configContent.toJSONString());
+            AppLogger.developmentMessage(JSONParser.class, "Finished JSON Parsing.");
+            AppLogger.developmentMessage(JSONParser.class, configFilePath + " CONTENT -> " + configContent.toJSONString());
         }
         catch (FileNotFoundException ex) {
 //            throw ex;

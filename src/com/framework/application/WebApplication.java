@@ -26,15 +26,14 @@ public class WebApplication implements Application{
         parser.parse(APPLICATION_CONFIG_PATH);
 
         // Setting up Logger
-        AppLogger logger = AppLogger.getInstance(WebApplication.class);
-        logger.setLogLevels((List<String>) parser.getPropertyValue("log-level"));
-        logger.infoMessage("Starting Web Application.");
-        logger.configMessage("application-config.json Loaded into Application.");
+        AppLogger.setLogLevels((List<String>) parser.getPropertyValue("log-level"));
+        AppLogger.infoMessage(WebApplication.class, "Starting Web Application.");
+        AppLogger.configMessage(WebApplication.class, "application-config.json Loaded into Application.");
 
         // APPLICATION INFO LOG
-        logger.infoMessage("APPLICATION NAME -> " + parser.getPropertyValue("application-name"));
-        logger.infoMessage("APPLICATION VERSION -> " + parser.getPropertyValue("version"));
-        logger.infoMessage("Preferred Config Type -> " + parser.getPropertyValue("config-file-type"));
+        AppLogger.infoMessage(WebApplication.class, "APPLICATION NAME -> " + parser.getPropertyValue("application-name"));
+        AppLogger.infoMessage(WebApplication.class, "APPLICATION VERSION -> " + parser.getPropertyValue("version"));
+        AppLogger.infoMessage(WebApplication.class, "Preferred Config Type -> " + parser.getPropertyValue("config-file-type"));
 
         // Load Controllers
         ControllerInitializer.loadControllers();
@@ -43,7 +42,7 @@ public class WebApplication implements Application{
         // Start Server
         Server server = ServerFactory.getServer(parser.getPropertyValue("server").toString());
         server.setPort(Integer.parseInt(parser.getPropertyValue("server-port").toString()));
-        logger.infoMessage(server.getServerName() + " Server Starting On Port -> http://" + server.getHost() + ":" +server.getPort());
+        AppLogger.infoMessage(WebApplication.class, server.getServerName() + " Server Starting On Port -> http://" + server.getHost() + ":" +server.getPort());
         server.start();
     }
 
