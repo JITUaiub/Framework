@@ -6,10 +6,10 @@ import org.reflections.Reflections;
 import java.lang.reflect.Method;
 
 public class ControllerInitializer {
-    public static void loadControllers() {
+    public static void loadControllers(String basePackage) {
         AppLogger.infoMessage(ControllerInitializer.class, "Scanning classpath for Controllers");
 
-        Reflections reflections = new Reflections("example");
+        Reflections reflections = new Reflections(basePackage);
         for (Class<?> cl : reflections.getTypesAnnotatedWith(Controller.class)) {
             Controller controller = cl.getAnnotation(Controller.class);
             AppLogger.developmentMessage(ControllerInitializer.class, "Controller loaded -> Name: " + cl.getName() + " Mapping: " + controller.mapping());

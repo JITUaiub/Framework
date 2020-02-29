@@ -33,7 +33,7 @@ public class WebApplication implements Application {
         AppLogger.infoMessage(WebApplication.class, "Preferred Config Type -> " + parser.getPropertyValue("config-file-type"));
 
         // Load Controllers
-        ControllerInitializer.loadControllers();
+        ControllerInitializer.loadControllers(parser.getPropertyValue("controller-base-package").toString());
 
 
         // Start Server
