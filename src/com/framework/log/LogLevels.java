@@ -4,8 +4,7 @@ public enum LogLevels {
     INFO("info"),
     DEVELOPMENT("development"),
     WARNING("warning"),
-    CONFIG("config")
-    ;
+    CONFIG("config");
 
     private final String text;
 

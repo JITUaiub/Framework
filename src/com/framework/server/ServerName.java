@@ -1,8 +1,7 @@
 package com.framework.server;
 
 public enum ServerName {
-    TOMCAT("tomcat")
-    ;
+    TOMCAT("tomcat");
 
     private final String text;
 

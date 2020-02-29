@@ -3,9 +3,6 @@ package com.framework.controller;
 import com.framework.log.AppLogger;
 import org.reflections.Reflections;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ControllerInitializer {
     public static void loadControllers() {
         AppLogger.infoMessage(ControllerInitializer.class, "Scanning classpath for Controllers");

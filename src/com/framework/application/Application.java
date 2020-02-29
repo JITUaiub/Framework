@@ -1,6 +1,7 @@
 package com.framework.application;
 
 public interface Application {
-    void initialize ();
-    void run ();
+    void initialize();
+
+    void run();
 }

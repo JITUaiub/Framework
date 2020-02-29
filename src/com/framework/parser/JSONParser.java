@@ -1,6 +1,5 @@
 package com.framework.parser;
 
-import com.framework.application.WebApplication;
 import com.framework.log.AppLogger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -13,7 +12,7 @@ public class JSONParser implements Parser {
     private JSONObject configContent;
     JSONObject object;
 
-    public JSONParser (){
+    public JSONParser() {
         configContent = null;
         object = null;
     }
@@ -26,13 +25,12 @@ public class JSONParser implements Parser {
             this.configContent = (JSONObject) jsonParser.parse(new FileReader(configFilePath));
             AppLogger.developmentMessage(JSONParser.class, "Finished JSON Parsing.");
             AppLogger.developmentMessage(JSONParser.class, configFilePath + " CONTENT -> " + configContent.toJSONString());
-        }
-        catch (FileNotFoundException ex) {
+        } catch (FileNotFoundException ex) {
 //            throw ex;
         } catch (ParseException ex) {
-            //            throw ex;
+//            throw ex;
         } catch (IOException ex) {
-            //            throw ex;
+//            throw ex;
         }
     }
 

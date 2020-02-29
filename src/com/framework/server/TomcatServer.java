@@ -1,4 +1,5 @@
 package com.framework.server;
+
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
@@ -63,7 +64,7 @@ public class TomcatServer implements Server {
         applicationContext.addServletMapping("/*", "Embedded");
     }
 
-    private Tomcat getTomcat () {
+    private Tomcat getTomcat() {
         return tomcat;
     }
 
@@ -72,7 +73,7 @@ public class TomcatServer implements Server {
         try {
             getTomcat().start();
             getTomcat().getServer().await();
-        }catch (LifecycleException ex) {
+        } catch (LifecycleException ex) {
 
         }
     }
@@ -81,7 +82,7 @@ public class TomcatServer implements Server {
     public void stop() {
         try {
             getTomcat().stop();
-        }catch (LifecycleException ex) {
+        } catch (LifecycleException ex) {
 
         }
     }
@@ -90,7 +91,7 @@ public class TomcatServer implements Server {
     public void destroy() {
         try {
             getTomcat().destroy();
-        }catch (LifecycleException ex) {
+        } catch (LifecycleException ex) {
 
         }
     }

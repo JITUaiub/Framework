@@ -6,13 +6,10 @@ import com.framework.parser.JSONParser;
 import com.framework.parser.Parser;
 import com.framework.server.Server;
 import com.framework.server.ServerFactory;
-import com.framework.server.TomcatServer;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class WebApplication implements Application{
+public class WebApplication implements Application {
     private final String APPLICATION_CONFIG_PATH;
 
     public WebApplication(String app_config) {
@@ -42,7 +39,7 @@ public class WebApplication implements Application{
         // Start Server
         Server server = ServerFactory.getServer(parser.getPropertyValue("server").toString());
         server.setPort(Integer.parseInt(parser.getPropertyValue("server-port").toString()));
-        AppLogger.infoMessage(WebApplication.class, server.getServerName() + " Server Starting On Port -> http://" + server.getHost() + ":" +server.getPort());
+        AppLogger.infoMessage(WebApplication.class, server.getServerName() + " Server Starting On Port -> http://" + server.getHost() + ":" + server.getPort());
         server.start();
     }
 
