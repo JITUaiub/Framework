@@ -1,4 +1,4 @@
-package example;
+package example.abc;
 
 import com.framework.controller.Controller;
 import com.framework.controller.Mapping;

@@ -10,7 +10,8 @@ public class ControllerInitializer {
         Reflections reflections = new Reflections("example");
         for (Class<?> cl : reflections.getTypesAnnotatedWith(Controller.class)) {
             Controller controller = cl.getAnnotation(Controller.class);
-            AppLogger.infoMessage(ControllerInitializer.class, "Controller loaded -> Name: " + cl.getName() + " Mapping: " + controller.mapping());
+            AppLogger.developmentMessage(ControllerInitializer.class, "Controller loaded -> Name: " + cl.getName() + " Mapping: " + controller.mapping());
+
         }
         AppLogger.infoMessage(ControllerInitializer.class, "Controller loading finished.");
     }
