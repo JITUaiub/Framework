@@ -1,9 +1,11 @@
 package com.framework.server;
 
-import java.util.HashMap;
+import com.framework.controller.ControllerMap;
+
+import java.util.Map;
 
 public interface Server {
-    void init(HashMap<String, String> servletList);
+    void init(Map<String, Map<String, ControllerMap>> servletList);
 
     void start();
 

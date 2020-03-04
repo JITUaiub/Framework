@@ -6,7 +6,7 @@ import com.framework.controller.Mapping;
 @Controller(mapping = "/test")
 public class TestController {
 
-    @Mapping(mapping = "/hello", requestMethod = "get")
+    @Mapping(uri = "/hello", requestMethod = "get")
     public String test () {
 
         return "hello";

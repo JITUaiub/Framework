@@ -1,28 +1,32 @@
 package com.framework.server;
 
+import com.framework.controller.ControllerMap;
+import com.framework.servlet.ControllerDispatcher;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.Map;
 
 public class TomcatServer implements Server {
     private Tomcat tomcat;
     private int port;
     private Context applicationContext;
 
-    public TomcatServer(int port, HashMap<String, String> servletList) {
+    public TomcatServer(int port) {
         this.tomcat = new Tomcat();
         this.tomcat.setPort(port);
-
-        init(servletList);
     }
 
     @Override
@@ -31,7 +35,7 @@ public class TomcatServer implements Server {
     }
 
     @Override
-    public void init(HashMap<String, String> servletList) {
+    public void init(Map<String, Map<String, ControllerMap>> servletList) {
         applicationContext = tomcat.addContext("", new File(".").getAbsolutePath());
 
 //        servletList.forEach((key, value) -> {
@@ -48,6 +52,22 @@ public class TomcatServer implements Server {
 //            });
 //            applicationContext.addServletMapping("", "");
 //        });
+        servletList.forEach((key, value) -> {
+            value.forEach((valueKey, valueValue) -> {
+                System.out.println("Add controller: " + key + " " + valueKey);
+                Tomcat.addServlet(applicationContext, key, new HttpServlet() {
+                    @Override
+                    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+                        super.service(req, res);
+
+                        PrintWriter printWriter = res.getWriter();
+                        printWriter.println("Hello From Framework");
+                        printWriter.println("Controller: " + valueValue.getClassName());
+                        printWriter.println("request path: " + key + valueKey);
+                    }
+                });
+            });
+        });
 
         Tomcat.addServlet(applicationContext, "Embedded", new HttpServlet() {
             @Override

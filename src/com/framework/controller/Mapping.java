@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 public @interface Mapping {
     String requestMethod();
 
-    String mapping();
+    String uri();
 }

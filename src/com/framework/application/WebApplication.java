@@ -1,6 +1,6 @@
 package com.framework.application;
 
-import com.framework.controller.ControllerInitializer;
+import com.framework.controller.ApplicationContext;
 import com.framework.log.AppLogger;
 import com.framework.parser.JSONParser;
 import com.framework.parser.Parser;
@@ -33,12 +33,14 @@ public class WebApplication implements Application {
         AppLogger.infoMessage(WebApplication.class, "Preferred Config Type -> " + parser.getPropertyValue("config-file-type"));
 
         // Load Controllers
-        ControllerInitializer.loadControllers(parser.getPropertyValue("controller-base-package").toString());
+        ApplicationContext.loadControllers(parser.getPropertyValue("controller-base-package").toString());
 
 
         // Start Server
         Server server = ServerFactory.getServer(parser.getPropertyValue("server").toString());
         server.setPort(Integer.parseInt(parser.getPropertyValue("server-port").toString()));
+        server.init(ApplicationContext.CONTROLLER_CONTEXT);
+
         AppLogger.infoMessage(WebApplication.class, server.getServerName() + " Server Starting On Port -> http://" + server.getHost() + ":" + server.getPort());
         server.start();
     }
