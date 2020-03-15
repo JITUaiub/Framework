@@ -8,6 +8,8 @@ import com.framework.server.Server;
 import com.framework.server.ServerFactory;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WebApplication implements Application {
     private final String APPLICATION_CONFIG_PATH;
@@ -24,6 +26,14 @@ public class WebApplication implements Application {
 
         // Setting up Logger
         AppLogger.setLogLevels((List<String>) parser.getPropertyValue("log-level"));
+
+        System.out.println("\n" +
+                " ______ _____            __  __ ________          ______  _____  _  __\n" +
+                "|  ____|  __ \\     /\\   |  \\/  |  ____\\ \\        / / __ \\|  __ \\| |/ /\n" +
+                "| |__  | |__) |   /  \\  | \\  / | |__   \\ \\  /\\  / / |  | | |__) | ' / \n" +
+                "|  __| |  _  /   / /\\ \\ | |\\/| |  __|   \\ \\/  \\/ /| |  | |  _  /|  <  \n" +
+                "| |    | | \\ \\  / ____ \\| |  | | |____   \\  /\\  / | |__| | | \\ \\| . \\ \n" +
+                "|_|    |_|  \\_\\/_/    \\_\\_|  |_|______|   \\/  \\/   \\____/|_|  \\_\\_|\\_\\ [Version: " + parser.getPropertyValue("version") + "]\n");
         AppLogger.infoMessage(WebApplication.class, "Starting Web Application.");
         AppLogger.configMessage(WebApplication.class, "application-config.json Loaded into Application.");
 
