@@ -12,9 +12,9 @@ public class TestController2 {
         return "hello";
     }
 
-//    @Mapping(uri = "/hello2", requestMethod = "get")
-//    public String test2 () {
-//
-//        return "hello2";
-//    }
+    @Mapping(uri = "/hello2", requestMethod = "get")
+    public String test2 () {
+
+        return "hello2";
+    }
 }

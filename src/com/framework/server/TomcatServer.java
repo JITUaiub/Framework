@@ -1,22 +1,20 @@
 package com.framework.server;
 
+import com.framework.controller.ApplicationConfig;
 import com.framework.controller.ControllerMap;
-import com.framework.servlet.ControllerDispatcher;
+import com.framework.log.AppLogger;
+import com.framework.servlet.ControllerFrameworkServlet;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
 
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class TomcatServer implements Server {
@@ -38,50 +36,25 @@ public class TomcatServer implements Server {
     public void init(Map<String, Map<String, ControllerMap>> servletList) {
         applicationContext = tomcat.addContext("", new File(".").getAbsolutePath());
 
-//        servletList.forEach((key, value) -> {
-//            Tomcat.addServlet(applicationContext, key, new HttpServlet() {
-//                @Override
-//                protected void service(HttpServletRequest req, HttpServletResponse resp)
-//                        throws ServletException, IOException {
-//
-//                    Writer w = resp.getWriter();
-//                    w.write("Embedded Tomcat servlet.\n" + key);
-//                    w.flush();
-//                    w.close();
-//                }
-//            });
-//            applicationContext.addServletMapping("", "");
-//        });
-        servletList.forEach((key, value) -> {
-            value.forEach((valueKey, valueValue) -> {
-                System.out.println("Add controller: " + key + " " + valueKey);
-                Tomcat.addServlet(applicationContext, key, new HttpServlet() {
-                    @Override
-                    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-                        super.service(req, res);
-
-                        PrintWriter printWriter = res.getWriter();
-                        printWriter.println("Hello From Framework");
-                        printWriter.println("Controller: " + valueValue.getClassName());
-                        printWriter.println("request path: " + key + valueKey);
-                    }
+        servletList.forEach((classMapping, classValues) -> {
+            classValues.forEach((methodMapping, methodValues) -> {
+                String controllerPath = classMapping.concat(methodMapping).toLowerCase();
+                Tomcat.addServlet(applicationContext, controllerPath, new HttpServlet() {
+                        @Override
+                        protected void service(HttpServletRequest req, HttpServletResponse resp)
+                                throws IOException {
+                            ControllerFrameworkServlet controllerDispatcher = new ControllerFrameworkServlet(classMapping, methodMapping);
+                            controllerDispatcher.service(req, resp);
+                        }
                 });
+                applicationContext.addServletMapping(controllerPath, controllerPath);
+                AppLogger.developmentMessage(TomcatServer.class, "Controller loaded -> Name: " + methodValues.getClassName() + " Mapping: " + controllerPath);
             });
         });
 
-        Tomcat.addServlet(applicationContext, "Embedded", new HttpServlet() {
-            @Override
-            protected void service(HttpServletRequest req, HttpServletResponse resp)
-                    throws ServletException, IOException {
+        if (ApplicationConfig.ALLOW_UNMAPPED_URL_TO_BLANK) {
 
-                Writer w = resp.getWriter();
-                w.write("Embedded Tomcat servlet.\n");
-                w.flush();
-                w.close();
-            }
-        });
-
-        applicationContext.addServletMapping("/*", "Embedded");
+        }
     }
 
     private Tomcat getTomcat() {
