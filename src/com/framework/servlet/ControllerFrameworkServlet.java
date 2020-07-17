@@ -36,7 +36,7 @@ public class ControllerFrameworkServlet implements FrameworkServlet {
             methodsList = controllerClass.getMethods();
             for (Method method : methodsList) {
                 if (method.getName().equals(controllerMap.getMethods().get(path).getMethodName())) {
-                    String result = (String) method.invoke(controllerClass);
+                    String result = (String) method.invoke(controllerClass.newInstance());
                     System.out.println("Result: " + result);
                 }
             }
@@ -46,6 +46,8 @@ public class ControllerFrameworkServlet implements FrameworkServlet {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
             e.printStackTrace();
         }
 

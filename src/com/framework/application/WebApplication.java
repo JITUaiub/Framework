@@ -47,7 +47,7 @@ public class WebApplication implements Application {
 
 
         // Start Server
-        Server server = ServerFactory.getServer(parser.getPropertyValue("server").toString());
+        Server server = ServerFactory.getServer(Integer.valueOf((String) parser.getPropertyValue("server")));
         server.setPort(Integer.parseInt(parser.getPropertyValue("server-port").toString()));
         server.init(ApplicationContext.CONTROLLER_CONTEXT);
 

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,21 +37,44 @@ public class TomcatServer implements Server {
     public void init(Map<String, Map<String, ControllerMap>> servletList) {
         applicationContext = tomcat.addContext("", new File(".").getAbsolutePath());
 
-        servletList.forEach((classMapping, classValues) -> {
-            classValues.forEach((methodMapping, methodValues) -> {
-                String controllerPath = classMapping.concat(methodMapping).toLowerCase();
+         /*   ***************   JAVA 1.7 Implementation   ***************   */
+        Iterator<Map.Entry<String, Map<String, ControllerMap>>> classMap = servletList.entrySet().iterator();
+        while (classMap.hasNext()) {
+            final Map.Entry<String, Map<String, ControllerMap>> clazz = classMap.next();
+
+            Iterator<Map.Entry<String, ControllerMap>> methodMap = clazz.getValue().entrySet().iterator();
+            while (methodMap.hasNext()) {
+                final Map.Entry<String, ControllerMap> method = methodMap.next();
+
+                String controllerPath = clazz.getKey().concat(method.getKey()).toLowerCase();
                 Tomcat.addServlet(applicationContext, controllerPath, new HttpServlet() {
-                        @Override
-                        protected void service(HttpServletRequest req, HttpServletResponse resp)
-                                throws IOException {
-                            ControllerFrameworkServlet controllerDispatcher = new ControllerFrameworkServlet(classMapping, methodMapping);
-                            controllerDispatcher.service(req, resp);
-                        }
+                    @Override
+                    protected void service(HttpServletRequest req, HttpServletResponse resp)
+                            throws IOException {
+                        ControllerFrameworkServlet controllerDispatcher = new ControllerFrameworkServlet(clazz.getKey(), method.getKey());
+                        controllerDispatcher.service(req, resp);
+                    }
                 });
                 applicationContext.addServletMapping(controllerPath, controllerPath);
-                AppLogger.developmentMessage(TomcatServer.class, "Controller loaded -> Name: " + methodValues.getClassName() + " Mapping: " + controllerPath);
-            });
-        });
+                AppLogger.developmentMessage(TomcatServer.class, "Controller loaded -> Name: " + method.getValue().getClassName() + " Mapping: " + controllerPath);
+            }
+        }
+        /*   ***************   JAVA 1.8 Implementation   ***************   */
+//        servletList.forEach((classMapping, classValues) -> {
+//            classValues.forEach((methodMapping, methodValues) -> {
+//                String controllerPath = classMapping.concat(methodMapping).toLowerCase();
+//                Tomcat.addServlet(applicationContext, controllerPath, new HttpServlet() {
+//                        @Override
+//                        protected void service(HttpServletRequest req, HttpServletResponse resp)
+//                                throws IOException {
+//                            ControllerFrameworkServlet controllerDispatcher = new ControllerFrameworkServlet(classMapping, methodMapping);
+//                            controllerDispatcher.service(req, resp);
+//                        }
+//                });
+//                applicationContext.addServletMapping(controllerPath, controllerPath);
+//                AppLogger.developmentMessage(TomcatServer.class, "Controller loaded -> Name: " + methodValues.getClassName() + " Mapping: " + controllerPath);
+//            });
+//        });
 
         if (ApplicationConfig.ALLOW_UNMAPPED_URL_TO_BLANK) {
 

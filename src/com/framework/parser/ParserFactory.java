@@ -1,11 +1,11 @@
 package com.framework.parser;
 
 public class ParserFactory {
-    public Parser getParser(String parserType) {
+    public Parser getParser(Integer parserType) {
         switch (parserType) {
-            case "json":
+            case 1:
                 return new JSONParser();
-            case "xml":
+            case 2:
                 return null;
             default:
                 return null;

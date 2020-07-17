@@ -8,7 +8,8 @@
     "config",
     "warning"
   ],
-  "server" : "tomcat",
+  "server" : "1",
+  "server-name" : "tomcat",
   "server-port" : "8888",
   "controller-base-package" : "example"
 }

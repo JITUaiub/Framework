@@ -7,11 +7,11 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface ApplicationContext {
-    String CLASS_NAME_SEPARATOR = "\\.";
-    Map<String, Map<String, ControllerMap>> CONTROLLER_CONTEXT = new HashMap<>();
+public class ApplicationContext {
+    public static String CLASS_NAME_SEPARATOR = "\\.";
+    public static Map<String, Map<String, ControllerMap>> CONTROLLER_CONTEXT = new HashMap();
 
-    static void loadControllers(String basePackage) {
+    public static void loadControllers(String basePackage) {
         AppLogger.infoMessage(ApplicationContext.class, "Scanning classpath for Controllers");
 
         Reflections reflections = new Reflections(basePackage);
@@ -21,9 +21,9 @@ public interface ApplicationContext {
             String className = cl.getName().split(CLASS_NAME_SEPARATOR)[cl.getName().split(CLASS_NAME_SEPARATOR).length - 1];
             String qualifiedClassName = cl.getName();
             String classURI = controller.mapping();
-            Map<String, MethodMap> methodsWithURI = new HashMap<>();
+            Map<String, MethodMap> methodsWithURI = new HashMap();
 
-            Map<String, ControllerMap> tmpControllerMap = new HashMap<>();
+            Map<String, ControllerMap> tmpControllerMap = new HashMap();
             Method [] methodList = cl.getMethods();
             for (Method method : methodList) {
                 Mapping mapping = method.getAnnotation(Mapping.class);
